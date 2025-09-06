@@ -4,6 +4,7 @@ title: Env Variables
 
 import ClientEnvVarsNote from './\_clientEnvVarsNote.md'
 import { EnvVarsTable, EnvVar } from './EnvVarsTable'
+import { SecretGeneratorBlock } from './SecretGeneratorBlock'
 
 **Environment variables** are used to configure projects based on the context in which they run. This allows them to exhibit different behaviors in different environments, such as development, staging, or production.
 
@@ -13,7 +14,7 @@ While some env vars are required by Wasp, such as the database connection or sec
 
 Let's go over the available env vars in Wasp, how to define them, and how to use them in your project.
 
-## Client Env Vars
+## Client Env Vars {#client-env-vars}
 
 Client environment variables are injected into the client Javascript code during the build process, making them public and readable by anyone. Therefore, you should **never store secrets in them** (such as secret API keys, you should store secrets in the server env variables).
 
@@ -39,7 +40,7 @@ You can read them from the client code like this:
   </TabItem>
 </Tabs>
 
-Read more about the `env` object in the [API reference](#client-env-vars-1).
+Read more about the `env` object in the [API reference](#client-env-vars-api).
 
 ### Wasp Client Env Vars
 
@@ -92,7 +93,7 @@ These are some general env variables used for various Wasp features:
 { name: "DATABASE_URL", type: "String", isRequired: true, note: "The URL of the PostgreSQL database you want your app to use." },
 { name: "WASP_WEB_CLIENT_URL", type: "URL", isRequired: true, note: "Server uses this value as your client URL in various features e.g. linking to your app in e-mails." },
 { name: "WASP_SERVER_URL", type: "URL", isRequired: true, note: "Server uses this value as your server URL in various features e.g. to redirect users when logging in with OAuth providers like Google or GitHub." },
-{ name: "JWT_SECRET", type: "String", isRequired: true, note: <span>Needed to generate secure tokens. <a href="https://jwtsecret.com/generate" target="_blank" rel="noreferrer">Generate</a> a random string at least 32 characters long.</span> },
+{ name: "JWT_SECRET", type: "String", isRequired: true, note: <>A random string of at least 32 characters. Needed to generate secure tokens.<br /><SecretGeneratorBlock /></> },
 { name: "PORT", type: "Integer", isRequired: false, defaultValue: "3001", note: "This is where the server listens for requests." }
 ]}
 />
@@ -159,7 +160,7 @@ If you are using [Keycloak](../auth/social-auth/keycloak.md), you'll need to pro
 
 <EnvVarsTable
   envVars={[
-{ name: "PG_BOSS_NEW_OPTIONS", type: "String", isRequired: false, note: <span>It's parsed as JSON. Enables you to provide <a href="../advanced/jobs#declaring-jobs">custom config</a> for PgBoss.</span> }
+{ name: "PG_BOSS_NEW_OPTIONS", type: "String", isRequired: false, note: <span>A <a href="#json-env-vars">JSON env var</a>. Enables you to provide <a href="../advanced/jobs#pg_boss_new_options">custom config</a> for PgBoss.</span> }
 ]}
 />
 
@@ -182,7 +183,7 @@ During development (`wasp start`), there are two ways to provide env vars to you
 1. Using `.env` files. **(recommended)**
 2. Using shell. (useful for overrides)
 
-### 1. Using .env (dotenv) Files
+### 1. Using .env (dotenv) Files {#dotenv-files}
 
 ![Env vars usage in development](/img/env/prod_dev_fade.svg)
 
@@ -227,6 +228,34 @@ Defining environment variables in this way can be cumbersome even for a single p
 Defining env variables in production will depend on where you are deploying your Wasp project. In general, you will define them via mechanisms that your hosting provider provides.
 
 We talk about how to define env vars for each deployment option in the [deployment section](../deployment/env-vars.md).
+
+## JSON Env Vars {#json-env-vars}
+
+Some of the environment variables you pass to Wasp are parsed as JSON values. This is useful for features needing more in-depth configuration, but it comes with the caveat of ensuring that the JSON syntax is valid.
+
+The main issue comes in the form of escaping quotes, and the different ways to do it depending on where you are defining the env var.
+
+#### In `.env` files
+
+In `.env` files, you don't need to quote the full value, so you don't need to escape the quotes. For example, you can define a JSON object like this:
+
+```shell title=".env.server"
+PG_BOSS_NEW_OPTIONS={"connectionString":"...db url...","jobExpirationInSeconds":60,"maxRetries":3}
+```
+
+#### In the shell
+
+In the shell, you need to quote the full value and escape the quotes inside the JSON object. For example, you can define a JSON object like this:
+
+```shell
+PG_BOSS_NEW_OPTIONS="{\"connectionString\":\"...db url...\",\"jobExpirationInSeconds\":60,\"maxRetries\":3}"
+```
+
+As an alternative, you can use single quotes to avoid escaping the quotes inside the JSON object:
+
+```shell
+PG_BOSS_NEW_OPTIONS='{"connectionString":"...db url...","jobExpirationInSeconds":60,"maxRetries":3}'
+```
 
 ## Custom Env Var Validations
 
@@ -320,7 +349,7 @@ Read more about the env object in the [API Reference](#api-reference).
 
 There are **Wasp-defined** and **user-defined** env vars. Wasp already comes with built-in validation for Wasp-defined env vars. For your env vars, you can define your own validation.
 
-### Client Env Vars
+### Client Env Vars {#client-env-vars-api}
 
 #### User-defined env vars validation
 

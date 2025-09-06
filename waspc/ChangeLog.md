@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased
+
+### ⚠️ Breaking Changes
+
+- Wasp now requires Node.js version to be >=v22.12. [#2915](https://github.com/wasp-lang/wasp/pull/2915)
+- Wasp now uses ECMAScript Modules (ESM) instead of CommonJS (CJS) for Tailwind configuration files. ([#2998](https://github.com/wasp-lang/wasp/pull/2998))
+- Wasp now uses Vite 7. [#2914](https://github.com/wasp-lang/wasp/pull/2914)
+- Using Wasp Deploy for Railway now requires Railway CLI version 4.6.3 or greater. ([#3113](https://github.com/wasp-lang/wasp/pull/3113))
+
+### 🎉 New Features
+
+- New command: `wasp build start`. Lets you run your built Wasp app locally, just like in production. If required environment variables are missing, the command will show errors—helping you confirm which env vars you'll need to set in production. [#2796](https://github.com/wasp-lang/wasp/pull/2796)
+
+### 🔧 Small improvements
+
+- We now support Prisma schemas annotated with [leading triple-slash documentation comments](https://www.prisma.io/docs/orm/prisma-schema/overview#comments). ([#2949](https://github.com/wasp-lang/wasp/pull/2949))
+- We no longer use Stitches for our Auth UI components, reducing bundle size and improving performance. ([#3034](https://github.com/wasp-lang/wasp/pull/3034))
+- You can now create your project in a specific Railway workspace when using Wasp Deploy with the `--workspace` option ([#3113](https://github.com/wasp-lang/wasp/pull/3113))
+
+### 📖 Documentation
+
+- Added code examples on how to disable Wasp's default auth for custom auth actions. ([#3033](https://github.com/wasp-lang/wasp/pull/3033))
+
+## 0.17.1
+
+### 🐞 Bug fixes
+
+- Fixes parsing of `app.client` and `app.server` options in `main.wasp.ts` ([#2999](https://github.com/wasp-lang/wasp/pull/2999))
+
 ## 0.17.0
 
 ### ⚠️ Breaking Changes
@@ -27,6 +56,7 @@ Follow the [the official migration guide](https://wasp.sh/docs/migration-guides/
 
 ### 🎉 New Features
 
+- Added support for one-line deployment with Railway to `wasp deploy` command. ([#2578](https://github.com/wasp-lang/wasp/pull/2578))
 - Wasp now includes a `onAfterEmailVerified` auth hook. You can use this hook to run custom logic after a user has verified their email. ([#2602](https://github.com/wasp-lang/wasp/pull/2602))
 - Wasp now supports Slack as an auth provider (by @scorpil). ([#2764](https://github.com/wasp-lang/wasp/pull/2764))
 - You can now return Prisma `Decimal`s from your Queries and Actions. ([#2701](https://github.com/wasp-lang/wasp/pull/2701))
@@ -1918,5 +1948,3 @@ For exact details about new syntax, check https://wasp.sh/docs/language/syntax .
 - Added delay on recompilation to avoid redundant recompiling.
 - Added `onAuthSucceededRedirectTo` field in `app`.
 - and more!
-
-## Unreleased changes

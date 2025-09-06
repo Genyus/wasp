@@ -18,9 +18,10 @@ It's usually a two-step process, and it's the same for both the client and the s
 
    This will depend on your hosting provider. You can usually do this by adding an `A` record in your DNS settings that points to the app's IPv4 address. You often set the `AAAA` record for IPv6 address as well. Some hosting providers ask you to set the `CNAME` record instead of the `A` and `AAAA` records.
 
-:::note Using Wasp CLI?
+:::note Using `wasp deploy`?
 
-Check out how to do it for [Fly with Wasp CLI](./deployment-methods/cli.md#using-a-custom-domain-for-your-app) if you are using Wasp CLI to deploy your app.
+Check out how to set up custom domains with [Fly.io](./deployment-methods/wasp-deploy/fly.md#custom-domain) or [Railway](./deployment-methods/wasp-deploy/railway.md#custom-domain).
+
 :::
 
 2. Set up the **environment variables** for the app.

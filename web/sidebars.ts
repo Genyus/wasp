@@ -129,13 +129,23 @@ const sidebars: SidebarsConfig = {
         "deployment/intro",
         "deployment/env-vars",
         "deployment/database",
+        "deployment/local-testing",
         {
           type: "category",
           label: "Deployment Methods",
           collapsed: true,
           items: [
             "deployment/deployment-methods/overview",
-            "deployment/deployment-methods/cli",
+            {
+              type: "category",
+              label: "Wasp Deploy",
+              collapsed: true,
+              items: [
+                "deployment/deployment-methods/wasp-deploy/overview",
+                "deployment/deployment-methods/wasp-deploy/fly",
+                "deployment/deployment-methods/wasp-deploy/railway",
+              ],
+            },
             "deployment/deployment-methods/paas",
             "deployment/deployment-methods/self-hosted",
           ],
@@ -179,11 +189,17 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: "link",
+      label: "Roadmap",
+      href: "https://github.com/orgs/wasp-lang/projects/5",
+    },
+    {
       type: "category",
       label: "Migration guides",
       collapsed: true,
       collapsible: true,
       items: [
+        "migration-guides/migrate-from-0-17-to-0-18",
         "migration-guides/migrate-from-0-16-to-0-17",
         "migration-guides/migrate-from-0-15-to-0-16",
         "migration-guides/migrate-from-0-14-to-0-15",

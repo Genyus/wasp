@@ -11,6 +11,7 @@ data Call
   | Compile
   | Db Arguments -- db args
   | Build
+  | BuildStart Arguments
   | Version
   | Telemetry
   | Deps
@@ -18,7 +19,6 @@ data Call
   | Info
   | Studio
   | PrintBashCompletionInstruction
-  | GenerateBashCompletionScript
   | BashCompletionListCommands
   | WaspLS
   | Deploy Arguments -- deploy cmd passthrough args
