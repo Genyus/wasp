@@ -1,6 +1,41 @@
 # Changelog
 
-## Unreleased
+## 0.18.2 (Unreleased)
+
+### ⚠️ Breaking Changes
+
+Remember to check out the [migration guide](https://wasp.sh/docs/migration-guides/migrate-from-0-18-to-0-19) for step-by-step documentation on how to upgrade.
+
+- Wasp now requires your project's `package.json` to contain `"workspaces": [".wasp/build/*", ".wasp/out/*"]`. ([#3159](https://github.com/wasp-lang/wasp/pull/3159))
+
+### 🎉 New Features
+
+- Wasp now uses npm workspaces to manage our generated code. This makes our dependency system more reliable, improves install performance and reduces the size of each project on disk. ([#3159](https://github.com/wasp-lang/wasp/pull/3159))
+- You can now specify which PostgreSQL image to use in `wasp start db` with the `--db-image` argument. ([#3182](https://github.com/wasp-lang/wasp/pull/3182))
+- You can now specify which PostgreSQL image to use in `wasp deploy railway` with the `--db-image` argument. ([#3184](https://github.com/wasp-lang/wasp/pull/3184))
+- You can now specify which PostgreSQL image to use in `wasp deploy fly` with the `--db-image` argument. ([#3187](https://github.com/wasp-lang/wasp/pull/3187))
+
+### 🐞 Bug fixes
+
+- Fixed a type error with the default `NODE_ENV` value in the server env validation schema. ([#3189](https://github.com/wasp-lang/wasp/pull/3189))
+
+### 🔧 Small improvements
+
+- Creating a new OpenSaaS project is now much faster (around 20x faster in our testing!). ([#3196](https://github.com/wasp-lang/wasp/pull/3196))
+
+### 📖 Documentation
+
+- Added note for SMTP ports being blocked by some hosting providers (by @Vickram-T-G). ([#3109](https://github.com/wasp-lang/wasp/pull/3109))
+- Wasp's `kitchen-sink` application has been moved to the public examples (`examples/`) directory ([#3085](github.com/wasp-lang/wasp/issues/3085))
+- Added documentation on how to setup the Chrome DevTools workspace mapping with Wasp (by @0xTaneja). ([#3103](https://github.com/wasp-lang/wasp/pull/3103))
+
+## 0.18.1
+
+### 🐞 Bug fixes
+
+- Wasp now pins `@tanstack/react-query` to a patch version instead of a minor version to prevent future package releases from affecting Wasp. ([#3264](https://github.com/wasp-lang/wasp/pull/3264))
+
+## 0.18.0
 
 ### ⚠️ Breaking Changes
 
@@ -13,12 +48,24 @@
 
 - New command: `wasp build start`. Lets you run your built Wasp app locally, just like in production. If required environment variables are missing, the command will show errors—helping you confirm which env vars you'll need to set in production. [#2796](https://github.com/wasp-lang/wasp/pull/2796)
 
+### 🐞 Bug fixes
+
+- Wasp now correctly parses JSON env variables. ([#2849](https://github.com/wasp-lang/wasp/pull/2849)) by @genyus
+- Bash completion now knows about the `db` command. ([#3100](https://github.com/wasp-lang/wasp/pull/3100))
+- Bash completion no longer loops infinitely. ([#3107](https://github.com/wasp-lang/wasp/pull/3107)) by @Vickram-T-G
+- The `EmailSignupData` type now correctly has the the `email` field istead of the `username` field. ([#3149](https://github.com/wasp-lang/wasp/issues/3149))
+- Wasp now explicitly gives users access to its React Query version. ([#3158](https://github.com/wasp-lang/wasp/pull/3158))
+
 ### 🔧 Small improvements
 
-- We now support Prisma schemas annotated with [leading triple-slash documentation comments](https://www.prisma.io/docs/orm/prisma-schema/overview#comments). ([#2949](https://github.com/wasp-lang/wasp/pull/2949))
-- We no longer use Stitches for our Auth UI components, reducing bundle size and improving performance. ([#3034](https://github.com/wasp-lang/wasp/pull/3034))
-- You can now create your project in a specific Railway workspace when using Wasp Deploy with the `--workspace` option ([#3113](https://github.com/wasp-lang/wasp/pull/3113))
+- Support for Prisma schemas annotated with [leading triple-slash documentation comments](https://www.prisma.io/docs/orm/prisma-schema/overview#comments). ([#2949](https://github.com/wasp-lang/wasp/pull/2949))
+- Wasp no longer uses Stitches for Auth UI components, reducing bundle size and improving performance. ([#3034](https://github.com/wasp-lang/wasp/pull/3034))
+- You can now create your project in a specific Railway workspace when using Wasp Deploy with the `--workspace` option. ([#3113](https://github.com/wasp-lang/wasp/pull/3113))
+- Better error message when choosing a template that doesn't exist. ([#2992](https://github.com/wasp-lang/wasp/pull/2992))
+- Bash completion setup is simplified. ([#3100](https://github.com/wasp-lang/wasp/pull/3100))
 - Increased the font size in Auth UI components, preventing automatic zooming on mobile devices. (by @Vickram-T-G) ([#3110](https://github.com/wasp-lang/wasp/pull/3110/files))
+- Wasp now allows more flexibility in versions of React Query. ([#3158](https://github.com/wasp-lang/wasp/pull/3158))
+- Wasp's React Query version was bumped in order to avoid a bug on their side. ([#3158](https://github.com/wasp-lang/wasp/pull/3158))
 
 ### 📖 Documentation
 

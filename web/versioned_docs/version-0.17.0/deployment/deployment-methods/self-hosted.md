@@ -2,7 +2,7 @@
 title: Self-Hosted
 ---
 
-import ImgWithCaption from '@site/blog/components/ImgWithCaption'
+import { ImgWithCaption } from '@site/blog/components/ImgWithCaption'
 import { GuideLink } from './GuideLink.tsx'
 
 If you have your server or rent out a server, you can self-host your Wasp apps. Self-hosting your apps gives you full control over your apps and their data. It can be more cost-effective than a cloud provider since you can deploy multiple apps on a single server. However, you'll need to manage the server yourself, which can be time-consuming and require some technical knowledge.
@@ -31,7 +31,7 @@ To self-host your Wasp app, you need to follow these general steps:
 
 4. Configure the **env variables** on your server for the server app.
 
-<ImgWithCaption source="/img/deploying/self-hosting.png" alt="One of many possible self-hosting setups" caption="One of possible self-hosting setups" />
+<ImgWithCaption source="/img/deploying/self-hosting.png" alt="One of many possible self-hosting setups" caption="One possible self-hosting setup" />
 
 ## Deployment methods
 
