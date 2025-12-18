@@ -9,7 +9,7 @@ import Fixtures (systemSPRoot)
 import NeatInterpolation (trimming)
 import StrongPath (relfile)
 import qualified StrongPath as SP
-import Test.Tasty.Hspec
+import Test.Hspec
 import qualified Util.Prisma as Util
 import qualified Wasp.AppSpec as AS
 import qualified Wasp.AppSpec.Action as AS.Action
@@ -508,7 +508,7 @@ spec_AppSpecValid = do
               { Npm.PackageJson.name = "testApp",
                 Npm.PackageJson.dependencies = M.empty,
                 Npm.PackageJson.devDependencies = M.empty,
-                Npm.PackageJson.workspaces = Just $ S.toList NW.workspaceGlobs
+                Npm.PackageJson.workspaces = Just $ S.toList NW.requiredWorkspaceGlobs
               },
           AS.isBuild = False,
           AS.migrationsDir = Nothing,

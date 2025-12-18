@@ -43,7 +43,12 @@ import Wasp.Env (envVarsToDotEnvContent)
 import qualified Wasp.ExternalConfig.Npm.Dependency as Npm.Dependency
 import Wasp.Generator.Common (ServerRootDir)
 import qualified Wasp.Generator.Crud.Routes as CrudRoutes
-import Wasp.Generator.DepVersions (superjsonVersion, typescriptVersion)
+import Wasp.Generator.DepVersions
+  ( expressTypesVersion,
+    expressVersionStr,
+    superjsonVersion,
+    typescriptVersion,
+  )
 import Wasp.Generator.FileDraft (FileDraft, createTextFileDraft)
 import Wasp.Generator.Monad (Generator)
 import Wasp.Generator.NpmDependencies (NpmDepsForPackage (peerDependencies))
@@ -54,7 +59,6 @@ import Wasp.Generator.ServerGenerator.AuthG (genAuth)
 import qualified Wasp.Generator.ServerGenerator.Common as C
 import Wasp.Generator.ServerGenerator.CrudG (genCrud)
 import Wasp.Generator.ServerGenerator.Db.Seed (genDbSeed, getDbSeeds, getPackageJsonPrismaSeedField)
-import Wasp.Generator.ServerGenerator.DepVersions (expressTypesVersion, expressVersionStr)
 import Wasp.Generator.ServerGenerator.JobGenerator (genJobs)
 import Wasp.Generator.ServerGenerator.JsImport (extImportToImportJson, getAliasedJsImportStmtAndIdentifier)
 import Wasp.Generator.ServerGenerator.OperationsG (genOperations)
@@ -124,7 +128,7 @@ genTsConfigJson spec = do
 
 genPackageJson :: AppSpec -> N.NpmDepsFromWasp -> Generator FileDraft
 genPackageJson spec waspDependencies = do
-  combinedDependencies <- N.genNpmDepsForPackage spec waspDependencies
+  serverDeps <- N.ensureNoConflictWithUserDeps waspDependencies $ N.getUserNpmDepsForPackage spec
   return $
     C.mkTmplFdWithDstAndData
       (C.asTmplFile [relfile|package.json|])
@@ -132,8 +136,8 @@ genPackageJson spec waspDependencies = do
       ( Just $
           object
             [ "packageName" .= serverPackageName spec,
-              "depsChunk" .= N.getDependenciesPackageJsonEntry combinedDependencies,
-              "devDepsChunk" .= N.getDevDependenciesPackageJsonEntry combinedDependencies,
+              "depsChunk" .= N.getDependenciesPackageJsonEntry serverDeps,
+              "devDepsChunk" .= N.getDevDependenciesPackageJsonEntry serverDeps,
               "nodeVersionRange" .= (">=" <> show NodeVersion.oldestWaspSupportedNodeVersion),
               "startProductionScript"
                 .= ( (if hasEntities then "npm run db-migrate-prod && " else "")
@@ -229,6 +233,7 @@ genSrcDir spec =
       genServerJs spec
     ]
     <++> genRoutesDir spec
+    <++> genViewsDir spec
     <++> genOperationsRoutes spec
     <++> genOperations spec
     <++> genAuth spec
@@ -278,11 +283,23 @@ genRoutesIndex spec =
           "crudRouteInRootRouter" .= (CrudRoutes.crudRouteInRootRouter :: String),
           "isAuthEnabled" .= (isAuthEnabled spec :: Bool),
           "areThereAnyCustomApiRoutes" .= (not . null $ AS.getApis spec),
-          "areThereAnyCrudRoutes" .= (not . null $ AS.getCruds spec)
+          "areThereAnyCrudRoutes" .= (not . null $ AS.getCruds spec),
+          "isDevelopment" .= (not $ AS.isBuild spec :: Bool),
+          "appName" .= (fst $ getApp spec :: String)
         ]
 
 operationsRouteInRootRouter :: String
 operationsRouteInRootRouter = "operations"
+
+genViewsDir :: AppSpec -> Generator [FileDraft]
+genViewsDir spec
+  | AS.isBuild spec = return []
+  | otherwise =
+      sequence
+        [ genFileCopy [relfile|views/wrong-port.ts|]
+        ]
+  where
+    genFileCopy = return . C.mkSrcTmplFd
 
 genMiddleware :: AppSpec -> Generator [FileDraft]
 genMiddleware spec =
